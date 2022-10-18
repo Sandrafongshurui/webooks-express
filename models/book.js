@@ -94,6 +94,13 @@ module.exports = (sequelize, DataTypes) => {
           isNumeric: true,
         },
       },
+      bookCover: {
+        type: DataTypes.STRING,
+        validate: {
+          notNull: true,
+          notEmpty: true,
+        },
+      },
     },
     {
       sequelize,

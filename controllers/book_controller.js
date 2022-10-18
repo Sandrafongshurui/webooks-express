@@ -1,7 +1,8 @@
 const bookModel = require("../models/book");
 
-module.exports = {
+bookController = {
     listBooks: async(req, res) => {
+        console.log("List all books")
         try {
             const books = await bookModel.findAll();
             res.json(books);
@@ -13,3 +14,5 @@ module.exports = {
 
     }
 }
+
+module.exports = bookController
