@@ -1,18 +1,31 @@
-const bookModel = require("../models/book");
+const db = require("../models");
 
 bookController = {
-    listBooks: async(req, res) => {
-        console.log("List all books")
-        try {
-            const books = await bookModel.findAll();
-            res.json(books);
-        } catch (error) {
-            res.json({
-                error: error.errors[0].message
-            });
-        }
-
+  listBooks: async (req, res) => {
+    try {
+      console.log("List all books");
+      const books = await db.book.findAll();
+      return res.json(books);
+    } catch (error) {
+      console.log(error);
+      return res.json({ error: error });
     }
-}
+  },
+  showBook: async (req, res) => {
+    try {
+      const book = await db.book.findByPk(req.params.id);
+      if (book) {
+        return res.json(book);
+      } else {
+        return res.status(404).json({
+          error: "Book not found.",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.json({ error: error });
+    }
+  },
+};
 
-module.exports = bookController
+module.exports = bookController;

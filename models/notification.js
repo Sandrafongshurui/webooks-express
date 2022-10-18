@@ -11,21 +11,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.notification.hasOne(models.user);
+      models.notification.belongsTo(models.user);
     }
   }
   notification.init({
     userId:{
-      type: DataTypes.integer,
+      type: DataTypes.INTEGER,
       validate: {
-        notNull: true,
+        allowNull:false,
         notEmpty: true,
       },
     },
     message: {
       type: DataTypes.STRING,
       validate: {
-        notNull: true,
+        allowNull:false,
         notEmpty: true,
       },
     },

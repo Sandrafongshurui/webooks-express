@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.genre.hasMany(models.books);
+      models.genre.hasMany(models.book);
     }
   }
   genre.init(
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
           isAlpha: true,
         },

@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.user.hasMany(models.loan);
+      models.user.hasMany(models.reserve);
+      models.user.hasMany(models.favourite);
+      models.user.hasMany(models.notification);
     }
   }
   user.init(
@@ -17,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
           len: 4,
           isAlpha: true,
@@ -27,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
           len: 4,
           isAlpha: true,
@@ -37,14 +41,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
           isEmail: true,
         },
       },
       password: {
         type: DataTypes.STRING,
-        notNull: true,
+        allowNull:false,
       },
       is_librarian: {
         type: DataTypes.BOOLEAN,

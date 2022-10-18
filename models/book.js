@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.book.hasOne(models.genre);
+      models.book.belongsTo(models.genre);
     }
   }
   book.init(
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
           is: /^[a-zA-Z0-9\s]+$/,
         },
@@ -27,34 +27,24 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
           //letters and spaces
           is: /^[a-zA-Z\s]+$/,
         },
       },
-      genre: {
+      genreId: {
         type: DataTypes.INTEGER,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
-        },
-      },
-      publisher: {
-        type: DataTypes.STRING,
-
-        validate: {
-          notNull: true,
-          notEmpty: true,
-          // \w letter, numbers underscores, \s for pscaes tabe lins breaks
-          is: /^[-\w\s]+$/,
         },
       },
       sypnosis: {
         type: DataTypes.STRING,
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
           is: /^[-\w\s]+$/,
         },
@@ -63,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
           isNumeric: true,
         },
@@ -72,24 +62,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
-        },
-      },
-      totalPages: {
-        type: DataTypes.INTEGER,
-
-        validate: {
-          notNull: true,
-          notEmpty: true,
-          isNumeric: true,
         },
       },
       totalLoans: {
         type: DataTypes.INTEGER,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
           isNumeric: true,
         },
@@ -97,7 +78,7 @@ module.exports = (sequelize, DataTypes) => {
       bookCover: {
         type: DataTypes.STRING,
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
         },
       },

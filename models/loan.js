@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.loan.hasMany(models.books);
+      models.loan.belongsTo(models.book);
     }
   }
   loan.init(
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
         },
       },
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
         },
       },
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           notEmpty: true,
         },
       },
@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
 
         validate: {
-          notNull: true,
+          allowNull:false,
           isDate: true,
         },
       },

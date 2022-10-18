@@ -4,9 +4,9 @@ const bookController = require('../controllers/book_controller')
 //const validators = require ("../middlewares/validation/validators/listingValidators")
 const router = express.Router()
 
-//http://localhost:8000/api/v1/
+//http://localhost:8000/api/v1/books
 router.get('/', bookController.listBooks)//returns []
-//router.get('/books/:bookId', bookController.showListing)//return {}
+router.get('/:id', bookController.showBook)//return {}
 
 
 module.exports = router
