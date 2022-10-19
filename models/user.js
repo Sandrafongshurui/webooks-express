@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       models.user.hasMany(models.reserve);
       models.user.hasMany(models.favourite);
       models.user.hasMany(models.notification);
+      models.user.belongsTo(models.genre);
     }
   }
   user.init(
@@ -33,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           allowNull:false,
           notEmpty: true,
-          len: 4,
+          len: 2,
           isAlpha: true,
         },
       },
@@ -50,9 +51,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull:false,
       },
-      is_librarian: {
+      isLibrarian: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+      },
+      genreId:{
+        type: DataTypes.INTEGER,
       },
     },
     {

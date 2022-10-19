@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.genre.hasMany(models.book);
+      models.genre.hasMany(models.user);
     }
   }
   genre.init(

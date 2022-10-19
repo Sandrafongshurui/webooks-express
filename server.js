@@ -4,10 +4,11 @@ const express = require("express");
 const cors = require("cors");
 const bookRouter = require("./routers/book_routes");
 const userRouter = require("./routers/user_routes");
-console.log("READING SERVER.JS");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

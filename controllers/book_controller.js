@@ -26,6 +26,14 @@ bookController = {
       return res.json({ error: error });
     }
   },
+  search: async (req, res) => {
+    try {
+        
+      }
+     catch (error) {
+      
+    }
+  },
 };
 
 module.exports = bookController;
