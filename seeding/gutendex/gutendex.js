@@ -1,7 +1,34 @@
 // // call the gutendex api
 // // get all the books and translate to my schema and seed my database
+const axios = require("axios");
+const seedingList = []
+const randomInteger =  (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+//get back data from http://gutendex.com//books/37106
 
-// //get back data from http://gutendex.com//books/37106
+const getBooks = async() => {
+    const res = await axios.get(`http://gutendex.com/books`)
+    const data = res.data.results
+    // console.log(data)
+    // console.log("data length", data.length)
+    data.forEach(bookData => {
+        const {title, authors, subjects, formats, download_count} = bookData
+        const newBookData = {
+            title:title,
+            author: authors.name,
+            genreId: randomInteger(0,15),
+            sypnosis: "",
+            copiesAvailable : randomInteger(2,20),
+            epubUrl: formats.application/epub+zip,
+            totalLoans: download_count
+        }
+        seedingList.push(newBookData)
+    });
+    console.log(seedingList.length)
+}
+getBooks()
+
 // {
 //     "id": 37106,
 //     "title": "Little Women; Or, Meg, Jo, Beth, and Amy",
