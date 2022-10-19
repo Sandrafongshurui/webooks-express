@@ -8,10 +8,6 @@ const upload = multer()
 const router = express.Router()
 
 //http://localhost:8000/api/v1/user
-router.post('/register', userController.register,userController.login)//returns 201
-router.post('/login', userController.login)//returns 200, token in cookie
-router.post('/logout', userController.logout)//returns []
-
 router.get('/profile', authMiddleware, userController.showProfile)//returns {}
 router.get('/loans', authMiddleware, userController.listLoans)//return []
 // router.get('/loans/:id', userController.showLoan)//return {}
@@ -29,6 +25,7 @@ router.patch('/profile', authMiddleware, upload.single("file"), imageMethods.upl
 
 // router.delete('/loan/:id', userController.editBook) //return 200
 // router.delete('/profile', userController.editProfile) //return 200
+// router.delete('/favourite/:id', userController.deleteFavourite) //return 200
 
 
 

@@ -135,7 +135,7 @@ const userController = {
     try {
       //find all the loans, include the user table as well
       loans = await db.loan.findAll({
-        include: { model: db.user},
+        include: { model: db.user },
         where: { userId: userAuth },
       });
 
@@ -157,16 +157,20 @@ const userController = {
     }
 
     try {
-      reserves = await db.reserve.findAll({ where: { userId: userAuth } });
-      console.log(loans);
-      return res.json(loans);
+      //find all the reserves, include the book table as well
+      reserves = await db.reserve.findAll({
+        include: { model: db.book },
+        where: { userId: userAuth },
+      });
+      console.log(reserves);
+      return res.json(reserves);
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ error: "failed to get user's loans" });
+      return res.status(500).json({ error: "failed to get user's reserves" });
     }
   },
-  listFavorites: async (req, res) => {
-    let favorites = null;
+  listFavourites: async (req, res) => {
+    let favourites = null;
     let userAuth = req.userId; //this is where the token is saved
     // console.log(req.file)
     //this is redundant, security, defence indepth
@@ -176,9 +180,13 @@ const userController = {
     }
 
     try {
-      favorites = await db.favorite.findAll({ where: { userId: userAuth } });
-      console.log(loans);
-      return res.json(loans);
+      //find all the favourites, include the book table as well
+        favourites = await db.favourite.findAll({
+        include: { model: db.book },
+        where: { userId: userAuth },
+      });
+      console.log(favourites);
+      return res.json(favourites);
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: "failed to get user's loans" });
