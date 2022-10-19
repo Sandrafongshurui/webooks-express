@@ -20,9 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       firstName: {
         type: DataTypes.STRING,
-
-        validate: {
-          allowNull:false,
+        allowNull: false,
+        validate: {        
           notEmpty: true,
           len: 4,
           isAlpha: true,
@@ -30,9 +29,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       lastName: {
         type: DataTypes.STRING,
-
-        validate: {
-          allowNull:false,
+        allowNull: false,
+        validate: {         
           notEmpty: true,
           len: 2,
           isAlpha: true,
@@ -40,23 +38,29 @@ module.exports = (sequelize, DataTypes) => {
       },
       email: {
         type: DataTypes.STRING,
-
-        validate: {
-          allowNull:false,
+        allowNull: false,
+        validate: {    
           notEmpty: true,
           isEmail: true,
         },
       },
       password: {
         type: DataTypes.STRING,
-        allowNull:false,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+          len: 4,
+        },
       },
       isLibrarian: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      genreId:{
+      genreId: {
         type: DataTypes.INTEGER,
+      },
+      profileImgUrl: {
+        type: DataTypes.STRING,
       },
     },
     {

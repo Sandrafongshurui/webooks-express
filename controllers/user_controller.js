@@ -1,12 +1,13 @@
 const db = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const book = require("../models/book");
 
 const userController = {
-  register: async (req, res) => {
+  register: async (req, res, next) => {
     try {
       const passHash = await bcrypt.hash(req.body.password, 10);
-      const [user, created] = await db.user.findorCreate({
+      const [user, created] = await db.user.findOrCreate({
         where: { email: req.body.email },
         defaults: {
           ...req.body,
@@ -14,12 +15,14 @@ const userController = {
         },
       });
       if (created) {
-        console.log("created user:", user);
-        return res.status(201).json("New User Created");
+        console.log("New User Created:", user);
+        next();
+        // return res.status(201).json("New User Created");
       } else {
         return res.status(201).json("Email already exists");
       }
     } catch (err) {
+      console.log(err);
       return res.status(500).json({ error: "Failed to register new user" });
     }
   },
@@ -32,6 +35,7 @@ const userController = {
         return res.status(401).json({ error: errMsg });
       }
     } catch (err) {
+      console.log(err);
       return res.status(500).json({ error: "failed to get user" });
     }
 
@@ -63,7 +67,7 @@ const userController = {
     return res
       .cookie("token", token, {
         httpOnly: true, //use at development
-        secure: process.env.NODE_ENV === "production", //use at production
+        secure: process.env.NODE_ENV === "production",
       })
       .status(200)
       .json({ message: "Logged in successfully" });
@@ -76,7 +80,7 @@ const userController = {
   },
   showProfile: async (req, res) => {
     let user = null;
-    let userAuth = res.locals.userAuth.data.userId; //this is where the token is saved
+    let userAuth = req.userId; //res.locals.userAuthId;
     console.log("----->", userAuth);
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -85,20 +89,21 @@ const userController = {
     }
 
     try {
-      user = await db.user.findOne({ _id: userAuth }); //cos the userAuth email is in a data opbject, when signed token at login
+      user = await db.user.findOne({ where: { id: userAuth } });
       if (!user) {
         return res.status(404).json({ error: "user does not exsits" });
       }
       console.log(user);
       return res.json(user);
     } catch (err) {
+      console.log(err);
       return res.status(500).json({ error: "failed to get user" });
     }
   },
   editProfile: async (req, res) => {
     let user = null;
-    let userAuth = res.locals.userAuth.data.userId; //this is where the token is saved
-
+    let userAuth = req.userId; //this is where the token is saved
+    // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
       console.log(userAuth);
@@ -106,23 +111,45 @@ const userController = {
     }
 
     try {
-      user = await db.user.findOneAndUpdate(
-        { _id: userAuth },
-        { $set: { ...req.body } },
-        { new: true }
+      await db.user.update(
+        { ...req.body, profileImgUrl: req.file },
+        {
+          where: { id: userAuth },
+        }
       );
-      if (!user) {
-        return res.status(404).json({ error: "User does not exists" });
-      }
       return res.status(200).json("Profile edited");
     } catch (err) {
+      console.log(err);
       return res.status(500).json({ error: "failed to get user" });
     }
   },
-  deleteProfile: async (req, res) => {
-    let user = null;
-    let userAuth = res.locals.userAuth.data.userId; //this is where the token is saved
+  listLoans: async (req, res) => {
+    let loans = null;
+    let userAuth = req.userId; //this is where the token is saved
+    // console.log(req.file)
+    //this is redundant, security, defence indepth
+    if (!userAuth) {
+      console.log(userAuth);
+      return res.status(401).json();
+    }
+    try {
+      //find all the loans, include the user table as well
+      loans = await db.loan.findAll({
+        include: { model: db.user},
+        where: { userId: userAuth },
+      });
 
+      console.log(loans);
+      return res.json(loans);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: "failed to get user's loans" });
+    }
+  },
+  listReserves: async (req, res) => {
+    let reserves = null;
+    let userAuth = req.userId; //this is where the token is saved
+    // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
       console.log(userAuth);
@@ -130,14 +157,33 @@ const userController = {
     }
 
     try {
-      user = await db.user.findOneAndDelete({ _id: userAuth });
-      if (!user) {
-        return res.status(404).json({ error: "user does not exsits" });
-      }
-      return res.status(200).json({ error: "Profile deleted" });
-    } catch (error) {
-      res.status(500);
-      return res.json({ error: "failed to delete profile" });
+      reserves = await db.reserve.findAll({ where: { userId: userAuth } });
+      console.log(loans);
+      return res.json(loans);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: "failed to get user's loans" });
+    }
+  },
+  listFavorites: async (req, res) => {
+    let favorites = null;
+    let userAuth = req.userId; //this is where the token is saved
+    // console.log(req.file)
+    //this is redundant, security, defence indepth
+    if (!userAuth) {
+      console.log(userAuth);
+      return res.status(401).json();
+    }
+
+    try {
+      favorites = await db.favorite.findAll({ where: { userId: userAuth } });
+      console.log(loans);
+      return res.json(loans);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: "failed to get user's loans" });
     }
   },
 };
+
+module.exports = userController;
