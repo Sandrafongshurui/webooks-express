@@ -7,12 +7,12 @@ const upload = multer()
 
 const router = express.Router()
 
-//http://localhost:8000/api/v1/user
+//http://localhost:8000/api/v1/
 router.get('/profile', authMiddleware, userController.showProfile)//returns {}
 router.get('/loans', authMiddleware, userController.listLoans)//return []
 // router.get('/loans/:id', userController.showLoan)//return {}
-router.get('/reserves', userController.listReserves) //return []
-router.get('/favourites', userController.listFavourites)//return []
+router.get('/reserves', authMiddleware, userController.listReserves) //return []
+router.get('/favourites', authMiddleware, userController.listFavourites)//return []
 
 // router.post('/book', userController.createBook)//returns 201
 // router.post('/loan/:book_id', userController.createLoan)//returns 201

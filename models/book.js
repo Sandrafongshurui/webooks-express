@@ -75,7 +75,7 @@ module.exports = (sequelize, DataTypes) => {
           isNumeric: true,
         },
       },
-      bookCover: {
+      bookImgUrl: {
         type: DataTypes.STRING,
         validate: {
           allowNull:false,

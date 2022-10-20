@@ -16,38 +16,29 @@ const getBooksMethods = {
         // console.log(data)
         // console.log("data length", data.length)
         data.forEach(bookData => {
+            console.log(bookData)
             const {title, authors, subjects, formats, download_count} = bookData
+            const authorName = authors[0]?.name || "Unknown author"
             const newBookData = {
                 title:title,
-                author: authors[0],
+                author: authorName,
                 genreId: randomInteger(0,15),
                 sypnosis: sypnosisList[randomInteger(0,sypnosisList.length-1)],
-                copiesAvailable : randomInteger(2,20),
+                copiesAvailable : randomInteger(2,5),
                 epubUrl: formats["application/epub+zip"],
                 totalLoans: download_count,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
-                bookCoverImgUrl: formats["image/jpeg"]
+                bookImgUrl: formats["image/jpeg"]
             }
             seedingList.push(newBookData)
         });
         // console.log(seedingList.length)
-        // console.log(seedingList)
+        //console.log(seedingList)
         return seedingList
     }
 }
-const promises = Promise.all
-let promise = new Promise(function(resolve, reject) {
-    getBooksMethods.getBooks()
-    resolve("done");
-  });
-const returns = new Promise((resolve, reject) => {
-    getBooksMethods.getBooks()
-  
-    resolve();
-  }).then(() => {
-    console.log(returns)
-  })
+getBooksMethods.getBooks()
 
 module.export = getBooksMethods
 

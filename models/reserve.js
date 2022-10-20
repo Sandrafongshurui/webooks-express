@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-    loanId:{
+    bookId:{
       type: DataTypes.INTEGER,
       validate: {
         allowNull:false,
