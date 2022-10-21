@@ -1,6 +1,6 @@
 const db = require("../models");
 
-bookController = {
+const bookController = {
   listBooks: async (req, res) => {
     try {
       console.log("List all books");
