@@ -8,3 +8,5 @@ const router = express.Router()
 router.post('/register', authController.register,authController.login)//returns 201
 router.post('/login', authController.login)//returns 200, token in cookie
 router.post('/logout', authMiddleware, authController.logout)//returns []
+
+module.exports = router
