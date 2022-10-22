@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
     try {
         const verified = jwt.verify(token, process.env.JWT_SECRET);
         //modify my req for easy access
-        res.locals.userAuthId = verified.data.userId
+        //res.locals.userAuthId = verified.data.userId
         req.userId = verified.data.userId;
         req.email = verified.data.email;
         return next();

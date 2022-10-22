@@ -5,3 +5,4 @@ npx sequelize model:create --name book --attributes title:string,author:string,p
 npx sequelize model:create --name favourite --attributes userId:integer,loanId:interger
 
 npx sequelize migration:create --name add-s-status-to-notifications 
+sequelize db:seed --seed my_seeder_file.js
