@@ -15,7 +15,7 @@ const userController = {
     }
 
     try {
-      user = await db.user.findByPk({ id: userAuth });
+      user = await db.user.findByPk(userAuth);
       if (!user) {
         return res.status(404).json({ error: "user does not exsits" });
       }
@@ -119,8 +119,8 @@ const userController = {
   createLoan: async (req, res) => {
     try {
       //check if its auto (from after cancel loan), or is user ownself create loan
-      userId = req.NextUserIdFromReserve || req.userId,
-      bookId = req.bookId || req.params.bookId
+      const userId = req.NextUserIdFromReserve || req.userId;
+      const bookId = req.bookId || req.params.bookId;
       const [loan, created] = await db.loan.findOrCreate({
         where: {
           userId,
@@ -134,19 +134,20 @@ const userController = {
         },
       });
       if (created) {
+        const loanedBook = await db.book.findByPk(loan.bookId);
         const book = await db.book.update(
           {
-            totalLoans: (totalLoans += 1),
-            copiesAvailable: (copiesAvailable -= 1),
+            totalLoans: (loanedBook.totalLoans += 1),
+            copiesAvailable: (loanedBook.copiesAvailable -= 1),
           },
-          { where: { id: loan.bookdId } }
+          { where: { id: loan.bookId } }
         );
         console.log("New loan Created:", loan);
         console.log("increase Book Total Loans", book);
         return res
           .status(201)
           .json(
-            "New User Created, increase loan number, deacrese copies available"
+            "New loan Created, increase loan number, deacrese copies available"
           );
       } else {
         return res.status(201).json("Loan already exists");
@@ -166,20 +167,30 @@ const userController = {
     }
     try {
       const loan = await db.loan.findByPk(req.params.id);
-      await db.loan.update(
-        { dueDate: dateMethods.addDays(loan.dueDate, 21) },
-        {
-          where: { id: req.params.id },
-        }
-      );
-      return res.status(200).json("Loan renewed");
+      //check the days b
+      const arrayOfDates = dateMethods.getDatesInRange(new Date(),loan.dueDate)
+      //only less than 3 days then can renew
+      if(arrayOfDates.length<4){
+        await db.loan.update(
+          { dueDate: dateMethods.addDays(loan.dueDate, 21) },
+          {
+            where: { id: req.params.id },
+          }
+        );
+        return res.status(200).json("Loan renewed");
+      }else{
+        const daysToRenewal = arrayOfDates.length - 4
+        return res.status(200).json(`It's too early for renewal! You will be able to renew it in ${daysToRenewal} days`);
+      }
+   
+      
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ error: "failed to edit book" });
+      return res.status(500).json({ error: "failed to renew book" });
     }
   },
   //use this for scheduled jobs
-  returnLoan: async (req, res) => {
+  returnLoan: async (req, res, next) => {
     let userAuth = req.userId; //this is where the token is saved
     // console.log(req.file)
     //this is redundant, security, defence indepth
@@ -188,12 +199,13 @@ const userController = {
       return res.status(401).json();
     }
     try {
-      const loan = await db.loan.findAll({
-        include: { model: db.book },
+      const loan = await db.loan.findOne({
+        include: [{ model: db.book, attributes: ["id", "copiesAvailable"] }],
         where: { id: req.params.id },
       });
+      console.log("---->", loan);
       const book = await db.book.update(
-        { copiesAvialble: (loan.book.copiesAvailable += 1) },
+        { copiesAvailable: (loan.book.copiesAvailable += 1) },
         { where: { id: loan.book.id } }
       );
       req.bookId = loan.book.id;
@@ -201,7 +213,7 @@ const userController = {
       const destroyloan = await db.loan.destroy({
         where: { id: req.params.id },
       });
-      console.log("Loan returned")
+      console.log("Loan returned");
       next();
       // return res.status(200).json("Loan returned");
     } catch (err) {
@@ -210,7 +222,7 @@ const userController = {
     }
   },
   //after return loan
-  checkReserveForBook: async (req, res) => {
+  checkReserveForBook: async (req, res, next) => {
     //check the rserves table if theres this book, sort with the earliest date first
     const reserves = await db.reserve.findAll({
       order: ["createdAt", "DESC"],
@@ -221,8 +233,8 @@ const userController = {
       //create a loan for this user
       req.NextUserIdFromReserve = reserves[0].userId;
       next();
-    }else{
-     return res.status(200).json("Loan returned, no other user reserve it");
+    } else {
+      return res.status(200).json("Loan returned, no other user reserve it");
     }
   },
   openBook: async (req, res) => {
@@ -235,7 +247,7 @@ const userController = {
     }
 
     try {
-      const loan = await db.loan.findByPk({ id: req.params.id });
+      const loan = await db.loan.findByPk(req.params.id);
       if (!loan) {
         return res.status(404).json({ error: "loan does not exsits" });
       }
@@ -358,7 +370,7 @@ const userController = {
   },
   createFavourite: async (req, res) => {
     try {
-      const [favourite, created] = await db.reserve.findOrCreate({
+      const [favourite, created] = await db.favourite.findOrCreate({
         where: { userId: req.userId, bookId: req.params.bookId },
         defaults: {
           userId: req.userId,
@@ -394,8 +406,78 @@ const userController = {
       return res.status(500).json({ error: "failed to cancel reserve" });
     }
   },
+  //notifications
+  listNotifications: async (req, res) => {
+    let notifications = null;
+    let userAuth = req.userId; //this is where the token is saved
+    // console.log(req.file)
+    //this is redundant, security, defence indepth
+    if (!userAuth) {
+      console.log(userAuth);
+      return res.status(401).json();
+    }
 
-  
+    try {
+      //find all the unread notifications
+      notifications = await db.notification.findAll({
+        where: { userId: userAuth, status: 0 },
+      });
+      console.log(notifications);
+      return res.json(notifications);
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(500)
+        .json({ error: "failed to get user's notifications" });
+    }
+  },
+  readNotification: async (req, res) => {
+    let notification = null;
+    let userAuth = req.userId; //this is where the token is saved
+    // console.log(req.file)
+    //this is redundant, security, defence indepth
+    if (!userAuth) {
+      console.log(userAuth);
+      return res.status(401).json();
+    }
+
+    try {
+      notification = await db.notification.update(
+        { status: 1 },
+        { where: { id: req.params.id } }
+      );
+      console.log(notification);
+      return res.status(200).json("Notification read");
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(500)
+        .json({ error: "failed to read user's notifications" });
+    }
+  },
+  deleteNotification: async (req, res) => {
+    let notification = null;
+    let userAuth = req.userId; //this is where the token is saved
+    // console.log(req.file)
+    //this is redundant, security, defence indepth
+    if (!userAuth) {
+      console.log(userAuth);
+      return res.status(401).json();
+    }
+
+    try {
+      notification = await db.notification.destroy({
+        where: { id: req.params.id },
+      });
+      console.log(notification);
+      return res.status(200).json("Notification deleted");
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(500)
+        .json({ error: "failed to delete user's notifications" });
+    }
+  },
 };
 
 module.exports = userController;

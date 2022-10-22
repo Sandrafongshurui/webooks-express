@@ -18,32 +18,32 @@ module.exports = (sequelize, DataTypes) => {
       userId: {
         type: DataTypes.INTEGER,
 
+        allowNull:false,
         validate: {
-          allowNull:false,
           notEmpty: true,
         },
       },
       bookId: {
         type: DataTypes.INTEGER,
 
+        allowNull:false,
         validate: {
-          allowNull:false,
           notEmpty: true,
         },
       },
       bookProgress: {
         type: DataTypes.STRING,
 
+        allowNull:false,
         validate: {
-          allowNull:false,
           notEmpty: true,
         },
       },
       dueDate: {
         type: DataTypes.STRING,
 
+        allowNull:false,
         validate: {
-          allowNull:false,
           isDate: true,
         },
       },

@@ -17,22 +17,24 @@ module.exports = (sequelize, DataTypes) => {
   annotations.init({
     page: {
       type: DataTypes.STRING,
+      allowNull:false,
       validate: {
-        allowNull:false,
+        
         notEmpty: true,
       },
     },
     loanId: {
       type: DataTypes.INTEGER,
-      validate: {
         allowNull:false,
+      validate: {
         notEmpty: true,
       },
     },
     text: {
       type: DataTypes.STRING,
+      allowNull:false,
       validate: {
-        allowNull:false,
+        
         notEmpty: true,
       },
     },

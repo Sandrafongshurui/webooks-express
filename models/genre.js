@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
       genreName: {
         type: DataTypes.STRING,
 
+        allowNull:false,
         validate: {
-          allowNull:false,
           notEmpty: true,
           isAlpha: true,
         },

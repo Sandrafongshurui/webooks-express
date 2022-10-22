@@ -17,15 +17,22 @@ module.exports = (sequelize, DataTypes) => {
   notification.init({
     userId:{
       type: DataTypes.INTEGER,
+      allowNull:false,
       validate: {
-        allowNull:false,
         notEmpty: true,
       },
     },
     message: {
       type: DataTypes.STRING,
+      allowNull:false,
       validate: {
-        allowNull:false,
+        notEmpty: true,
+      },
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull:false,
+      validate: {
         notEmpty: true,
       },
     },

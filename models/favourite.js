@@ -18,15 +18,15 @@ module.exports = (sequelize, DataTypes) => {
   favourite.init({
     userId:{
       type: DataTypes.INTEGER,
+      allowNull:false,
       validate: {
-        allowNull:false,
         notEmpty: true,
       },
     },
     bookId:{
       type: DataTypes.INTEGER,
+      allowNull:false,
       validate: {
-        allowNull:false,
         notEmpty: true,
       },
     },
