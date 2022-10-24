@@ -14,7 +14,8 @@ module.exports = (req, res, next) => {
         req.userId = verified.data.userId;
         req.email = verified.data.email;
         return next();
-      } catch {
+      } catch(err) {
+        console.log(err)
         return res.status(403).json("Only authorized users allowed");
       }
   };

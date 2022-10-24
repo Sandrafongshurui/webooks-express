@@ -134,16 +134,9 @@ const userController = {
         },
       });
       if (created) {
-        const loanedBook = await db.book.findByPk(loan.bookId);
-        const book = await db.book.update(
-          {
-            totalLoans: (loanedBook.totalLoans += 1),
-            copiesAvailable: (loanedBook.copiesAvailable -= 1),
-          },
-          { where: { id: loan.bookId } }
-        );
-        console.log("New loan Created:", loan);
-        console.log("increase Book Total Loans", book);
+        // const loanedBook = await db.book.findByPk(loan.bookId);
+        await db.book.increment("totalLoans", {by: 1, where: {id: req.params.bookId}})
+        await db.book.decrement("copiesAvailable", {by: 1, where: {id:  req.params.bookId}})
         return res
           .status(201)
           .json(
@@ -168,9 +161,12 @@ const userController = {
     try {
       const loan = await db.loan.findByPk(req.params.id);
       //check the days b
-      const arrayOfDates = dateMethods.getDatesInRange(new Date(),loan.dueDate)
+      const arrayOfDates = dateMethods.getDatesInRange(
+        new Date(),
+        loan.dueDate
+      );
       //only less than 3 days then can renew
-      if(arrayOfDates.length<4){
+      if (arrayOfDates.length < 4) {
         await db.loan.update(
           { dueDate: dateMethods.addDays(loan.dueDate, 21) },
           {
@@ -178,12 +174,14 @@ const userController = {
           }
         );
         return res.status(200).json("Loan renewed");
-      }else{
-        const daysToRenewal = arrayOfDates.length - 4
-        return res.status(200).json(`It's too early for renewal! You will be able to renew it in ${daysToRenewal} days`);
+      } else {
+        const daysToRenewal = arrayOfDates.length - 4;
+        return res
+          .status(200)
+          .json(
+            `It's too early for renewal! You will be able to renew it in ${daysToRenewal} days`
+          );
       }
-   
-      
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: "failed to renew book" });
@@ -199,19 +197,18 @@ const userController = {
       return res.status(401).json();
     }
     try {
-      const loan = await db.loan.findOne({
-        include: [{ model: db.book, attributes: ["id", "copiesAvailable"] }],
-        where: { id: req.params.id },
+      // const loan = await db.loan.findOne({
+      //   include: [{ model: db.book, attributes: ["id", "copiesAvailable"] }],
+      //   where: { id: req.params.id },
+      // });
+      // console.log("---->", loan);
+      const book = await db.book.increment("copiesAvailable", {
+        by: 1,
+        where: { id: req.params.bookId }
       });
-      console.log("---->", loan);
-      const book = await db.book.update(
-        { copiesAvailable: (loan.book.copiesAvailable += 1) },
-        { where: { id: loan.book.id } }
-      );
-      req.bookId = loan.book.id;
       //this shld delete annotations FK
       const destroyloan = await db.loan.destroy({
-        where: { id: req.params.id },
+        where: { id: req.params.loanId },
       });
       console.log("Loan returned");
       next();
@@ -225,8 +222,8 @@ const userController = {
   checkReserveForBook: async (req, res, next) => {
     //check the rserves table if theres this book, sort with the earliest date first
     const reserves = await db.reserve.findAll({
-      order: ["createdAt", "DESC"],
-      where: { bookId: req.bookId },
+      order: [["createdAt", "DESC"]],
+      where: { bookId: req.params.bookId },
     });
 
     if (reserves.length > 0) {
@@ -247,7 +244,11 @@ const userController = {
     }
 
     try {
-      const loan = await db.loan.findByPk(req.params.id);
+      const loan = await db.loan.findOne({
+        include: { model: db.book },
+        where: { id: req.params.loanId },
+      });
+
       if (!loan) {
         return res.status(404).json({ error: "loan does not exsits" });
       }
@@ -268,11 +269,11 @@ const userController = {
     }
 
     try {
-      const loan = await db.loan.findByPk({ id: req.params.id });
+      const loan = await db.loan.findByPk(req.params.loanId);
       await db.loan.update(
         { bookProgress: req.query.pageNum },
         {
-          where: { id: req.params.id },
+          where: { id: req.params.loanId },
         }
       );
       console.log(loan);
@@ -400,10 +401,10 @@ const userController = {
       const favourite = await db.favourite.destroy({
         where: { id: req.params.id },
       });
-      return res.status(200).json("Reserve cancelled");
+      return res.status(200).json("Favourite cancelled");
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ error: "failed to cancel reserve" });
+      return res.status(500).json({ error: "failed to cancel avourite" });
     }
   },
   //notifications

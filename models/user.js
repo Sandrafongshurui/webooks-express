@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {        
           notEmpty: true,
-          len: 4,
+          len: [4,20],
           isAlpha: true,
         },
       },
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {         
           notEmpty: true,
-          len: 2,
+          len: [4,20],
           isAlpha: true,
         },
       },
@@ -41,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
         validate: {    
+          
           notEmpty: true,
           isEmail: true,
         },
@@ -50,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: true,
-          len: 4,
+          len: [4,100]
         },
       },
       isLibrarian: {
