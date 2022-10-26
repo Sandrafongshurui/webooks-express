@@ -2,14 +2,14 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('notifications', {
+    await queryInterface.createTable('reserves', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userId:  {
+      userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -18,13 +18,14 @@ module.exports = {
         },
         onDelete: "CASCADE",
       },
-      message: {
+      bookId: {
         allowNull: false,
-        type: Sequelize.STRING
-      },
-      status: {
-        defaultValue: "unread",
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: {
+          model: "books",
+          key: "id",
+        },
+        onDelete: "CASCADE",
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +38,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('notifications');
+    await queryInterface.dropTable('reserves');
   }
 };

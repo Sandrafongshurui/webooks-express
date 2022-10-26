@@ -9,89 +9,69 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.book.hasOne(models.genre);
+      models.book.belongsTo(models.genre);
     }
   }
   book.init(
     {
       title: {
         type: DataTypes.STRING,
-
+        allowNull:false,
         validate: {
-          notNull: true,
           notEmpty: true,
-          is: /^[a-zA-Z0-9\s]+$/,
         },
       },
       author: {
         type: DataTypes.STRING,
-
+        allowNull:false,
         validate: {
-          notNull: true,
           notEmpty: true,
           //letters and spaces
-          is: /^[a-zA-Z\s]+$/,
+          is: /^[a-zA-Z\,\.\s]+$/,
         },
       },
-      genre: {
+      genreId: {
         type: DataTypes.INTEGER,
-
+        allowNull:false,
         validate: {
-          notNull: true,
+         
           notEmpty: true,
-        },
-      },
-      publisher: {
-        type: DataTypes.STRING,
-
-        validate: {
-          notNull: true,
-          notEmpty: true,
-          // \w letter, numbers underscores, \s for pscaes tabe lins breaks
-          is: /^[-\w\s]+$/,
         },
       },
       sypnosis: {
-        type: DataTypes.STRING,
-        validate: {
-          notNull: true,
+        type: DataTypes.TEXT,
+        allowNull:false,
+        validate: {          
           notEmpty: true,
-          is: /^[-\w\s]+$/,
         },
       },
       copiesAvailable: {
         type: DataTypes.INTEGER,
-
-        validate: {
-          notNull: true,
+        allowNull:false,
+        validate: {        
           notEmpty: true,
           isNumeric: true,
         },
       },
       epubUrl: {
         type: DataTypes.STRING,
-
+        allowNull:false,
         validate: {
-          notNull: true,
+          isUrl: true,
           notEmpty: true,
-        },
-      },
-      totalPages: {
-        type: DataTypes.INTEGER,
-
-        validate: {
-          notNull: true,
-          notEmpty: true,
-          isNumeric: true,
         },
       },
       totalLoans: {
         type: DataTypes.INTEGER,
-
+        default:0,
         validate: {
-          notNull: true,
-          notEmpty: true,
           isNumeric: true,
+        },
+      },
+      bookImgUrl: {
+        type: DataTypes.STRING,
+        validate: {
+          isUrl: true,
         },
       },
     },

@@ -11,28 +11,30 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.annotation.hasOne(models.loan);
+      models.annotation.belongsTo(models.loan);
     }
   }
   annotations.init({
     page: {
       type: DataTypes.STRING,
+      allowNull:false,
       validate: {
-        notNull: true,
+        
         notEmpty: true,
       },
     },
     loanId: {
-      type: DataTypes.integer,
+      type: DataTypes.INTEGER,
+        allowNull:false,
       validate: {
-        notNull: true,
         notEmpty: true,
       },
     },
     text: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
+      allowNull:false,
       validate: {
-        notNull: true,
+        
         notEmpty: true,
       },
     },

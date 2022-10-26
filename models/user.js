@@ -9,46 +9,60 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.user.hasMany(models.loan);
+      models.user.hasMany(models.reserve);
+      models.user.hasMany(models.favourite);
+      models.user.hasMany(models.notification);
+      models.user.belongsTo(models.genre);
     }
   }
   user.init(
     {
       firstName: {
         type: DataTypes.STRING,
-
-        validate: {
-          notNull: true,
+        allowNull: false,
+        validate: {        
           notEmpty: true,
-          len: 4,
+          len: [4,20],
           isAlpha: true,
         },
       },
       lastName: {
         type: DataTypes.STRING,
-
-        validate: {
-          notNull: true,
+        allowNull: false,
+        validate: {         
           notEmpty: true,
-          len: 4,
+          len: [4,20],
           isAlpha: true,
         },
       },
       email: {
         type: DataTypes.STRING,
-
-        validate: {
-          notNull: true,
+        allowNull: false,
+        unique: true,
+        validate: {    
+          
           notEmpty: true,
           isEmail: true,
         },
       },
       password: {
         type: DataTypes.STRING,
-        notNull: true,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+          len: [4,100]
+        },
       },
-      is_librarian: {
+      isLibrarian: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+      },
+      genreId: {
+        type: DataTypes.INTEGER,
+      },
+      profileImgUrl: {
+        type: DataTypes.STRING,
       },
     },
     {

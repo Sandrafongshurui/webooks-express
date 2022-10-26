@@ -9,40 +9,37 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.loan.hasMany(models.books);
+      models.loan.belongsTo(models.book);
+      models.loan.belongsTo(models.user);
     }
   }
   loan.init(
     {
       userId: {
         type: DataTypes.INTEGER,
-
+        allowNull:false,
         validate: {
-          notNull: true,
           notEmpty: true,
         },
       },
       bookId: {
         type: DataTypes.INTEGER,
-
+        allowNull:false,
         validate: {
-          notNull: true,
           notEmpty: true,
         },
       },
       bookProgress: {
         type: DataTypes.STRING,
-
+        allowNull:false,
         validate: {
-          notNull: true,
           notEmpty: true,
         },
       },
       dueDate: {
-        type: DataTypes.STRING,
-
+        type: DataTypes.DATE,
+        allowNull:false,
         validate: {
-          notNull: true,
           isDate: true,
         },
       },
