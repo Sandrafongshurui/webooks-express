@@ -5,43 +5,43 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert("favourites", [
       {
-        userId: 2,
-        bookId:6,
+        userId: 7,
+        bookId:1,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
       {
-        userId: 2,
+        userId: 7,
         bookId:7,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
       {
-        userId: 2,
-        bookId:8,
+        userId: 8,
+        bookId:2,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
       {
-        userId: 5,
+        userId: 8,
         bookId:7,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
       {
-        userId: 5,
+        userId: 9,
+        bookId:1,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        userId: 9,
         bookId:6,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
       {
-        userId: 3,
-        bookId:6,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        userId: 3,
+        userId: 9,
         bookId:7,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),

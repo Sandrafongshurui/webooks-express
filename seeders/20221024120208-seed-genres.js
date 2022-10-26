@@ -34,6 +34,12 @@ module.exports = {
       {
         genreName: "Fiction",
       },
+      {
+        genreName: "Romance",
+      },
+      {
+        genreName: "Adventure",
+      },
    
     ])
   },

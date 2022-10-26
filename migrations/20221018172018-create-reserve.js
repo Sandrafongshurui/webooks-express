@@ -18,11 +18,11 @@ module.exports = {
         },
         onDelete: "CASCADE",
       },
-      loanId: {
+      bookId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "loans",
+          model: "books",
           key: "id",
         },
         onDelete: "CASCADE",

@@ -5,16 +5,34 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const process = require('process');
 const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
+// const env = process.env.NODE_ENV || 'development';
+// const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+//1st method
+const sequelize = new Sequelize(process.env.DB_URL)
+sequelize.authenticate().then(() => {
+  console.log('Connection has been established successfully.');
+}).catch((error) => {
+  console.error('Unable to connect to the database: ', error);
+});
+
+//2nd method
+// const config = {
+//   database: process.env.DB_NAME,
+//   host: process.env.DB_HOST,
+//   username: process.env.DB_USER,
+//   password: process.env.DB_PASS,
+//   dialect: process.env.DB_DIALECT,
+// };
+// const sequelize = new Sequelize(process.env.DB_URL, config)
+
+// let sequelize;
+// if (config.use_env_variable) {
+//   sequelize = new Sequelize(process.env[config.use_env_variable], config);
+// } else {
+//   sequelize = new Sequelize(config.database, config.username, config.password, config);
+// }
 
 fs
   .readdirSync(__dirname)

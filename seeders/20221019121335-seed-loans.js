@@ -5,24 +5,32 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert("loans", [
       {
-        userId: 2,
-        bookId:6,
+        userId: 7,
+        bookId:1,
         bookProgress: "0",
         dueDate: dateMethods.addDays(new Date(), 21),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
       {
-        userId: 2,
-        bookId:7,
+        userId: 7,
+        bookId:2,
         bookProgress: "0",
         dueDate: dateMethods.addDays(new Date(), 21),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
       {
-        userId: 3,
-        bookId:6,
+        userId: 8,
+        bookId:1,
+        bookProgress: "0",
+        dueDate: dateMethods.addDays(new Date(), 21),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        userId: 8,
+        bookId:2,
         bookProgress: "0",
         dueDate: dateMethods.addDays(new Date(), 21),
         createdAt: new Date().toISOString(),

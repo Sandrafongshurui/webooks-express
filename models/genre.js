@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       genreName: {
         type: DataTypes.STRING,
-
         allowNull:false,
         validate: {
           notEmpty: true,

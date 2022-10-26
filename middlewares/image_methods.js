@@ -7,14 +7,13 @@ const imagekit = new ImageKit({
 });
 
 const imageMethods = {
-  uploadImge: (req, res, next) => {
-    // console.log(req.file)
+  uploadSingle: (req, res, next) => {
     if (req.file) {
       imagekit.upload(
         {
           file: req.file.buffer,
-          fileName: req.file.originalname, //required
-          folder: "webooks_profile_images",
+          fileName: req.file.originalname,
+          folderName: "webooks_images",
         },
         function (err, response) {
           if (err) {
@@ -30,11 +29,12 @@ const imageMethods = {
         }
       );
     } else {
-      console.log("no req.file");
-      return res.status(500).json({
-        status: "failed",
-        message: "An image is required",
-      });
+      console.log("no req.file, use no preview image");
+      next();
+      // return res.status(500).json({
+      //   status: "failed",
+      //   message: "An image is required",
+      // });
     }
   },
 };

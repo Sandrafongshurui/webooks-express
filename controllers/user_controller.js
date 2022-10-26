@@ -1,5 +1,6 @@
 const db = require("../models");
 const dateMethods = require("../utils/date_methods");
+const awsMethods = require("../middlewares/aws_methods");
 const stringMethods = require("../utils/string_methods");
 
 const userController = {
@@ -28,7 +29,7 @@ const userController = {
   },
   editProfile: async (req, res) => {
     let userAuth = req.userId; //this is where the token is saved
-    // console.log(req.file)
+    console.log(req.file);
     //this is redundant, security, defence indepth
     if (!userAuth) {
       console.log(userAuth);
@@ -51,19 +52,24 @@ const userController = {
   //books
   createBook: async (req, res) => {
     try {
-      const { title, author, epubUrl } = req.body;
-      const [book, created] = await db.book.findOrCreate({
-        where: { title, author, epubUrl },
-        defaults: {
-          ...req.body,
-        },
+      let epubUrl = null
+      let bookImgUrl = null 
+      req.uploadedData.forEach(element => {
+        if(element.Bucket === "webooks-epub-files")
+        {
+          epubUrl= element.Location
+        }else{
+          bookImgUrl= element.Location
+        }
+        
       });
-      if (created) {
-        console.log("New book Created:", book);
-        return res.status(201).json("New book Created");
-      } else {
-        return res.status(201).json("Book already exists");
-      }
+      const book = await db.book.create({
+        ...req.body,
+        epubUrl,
+        bookImgUrl
+      });
+      console.log("New book Created:", book);
+      return res.status(201).json("New book Created");
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: "Failed to create new book" });
@@ -105,7 +111,7 @@ const userController = {
     try {
       //find all the loans, include the user table as well
       loans = await db.loan.findAll({
-        include: { model: db.user },
+        include: { model: db.book },
         where: { userId: userAuth },
       });
 
@@ -135,8 +141,14 @@ const userController = {
       });
       if (created) {
         // const loanedBook = await db.book.findByPk(loan.bookId);
-        await db.book.increment("totalLoans", {by: 1, where: {id: req.params.bookId}})
-        await db.book.decrement("copiesAvailable", {by: 1, where: {id:  req.params.bookId}})
+        await db.book.increment("totalLoans", {
+          by: 1,
+          where: { id: req.params.bookId },
+        });
+        await db.book.decrement("copiesAvailable", {
+          by: 1,
+          where: { id: req.params.bookId },
+        });
         return res
           .status(201)
           .json(
@@ -204,7 +216,7 @@ const userController = {
       // console.log("---->", loan);
       const book = await db.book.increment("copiesAvailable", {
         by: 1,
-        where: { id: req.params.bookId }
+        where: { id: req.params.bookId },
       });
       //this shld delete annotations FK
       const destroyloan = await db.loan.destroy({
@@ -421,7 +433,7 @@ const userController = {
     try {
       //find all the unread notifications
       notifications = await db.notification.findAll({
-        where: { userId: userAuth, status: 0 },
+        where: { userId: userAuth, status: "unread" },
       });
       console.log(notifications);
       return res.json(notifications);
@@ -444,7 +456,7 @@ const userController = {
 
     try {
       notification = await db.notification.update(
-        { status: 1 },
+        { status: "read" },
         { where: { id: req.params.id } }
       );
       console.log(notification);

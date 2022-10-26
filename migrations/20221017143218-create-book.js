@@ -17,10 +17,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      publisher: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
       genre: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -31,7 +27,7 @@ module.exports = {
       },
       sypnosis: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       copiesAvailable: {
         allowNull: false,
@@ -41,13 +37,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      totalPages: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-      },
       totalLoans: {
         allowNull: false,
         type: Sequelize.INTEGER,
+      },
+      bookImgUrl: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

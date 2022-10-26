@@ -18,19 +18,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull:false,
         validate: {
-
           notEmpty: true,
-          is: /^[a-zA-Z0-9\s]+$/,
         },
       },
       author: {
         type: DataTypes.STRING,
         allowNull:false,
         validate: {
-         
           notEmpty: true,
           //letters and spaces
-          is: /^[a-zA-Z\s]+$/,
+          is: /^[a-zA-Z\,\.\s]+$/,
         },
       },
       genreId: {
@@ -42,19 +39,16 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       sypnosis: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull:false,
-        validate: {
-          
+        validate: {          
           notEmpty: true,
-          is: /^[-\w\s]+$/,
         },
       },
       copiesAvailable: {
         type: DataTypes.INTEGER,
         allowNull:false,
-        validate: {
-         
+        validate: {        
           notEmpty: true,
           isNumeric: true,
         },
@@ -63,23 +57,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull:false,
         validate: {
-          
+          isUrl: true,
           notEmpty: true,
         },
       },
       totalLoans: {
         type: DataTypes.INTEGER,
-        allowNull:false,
+        default:0,
         validate: {
-          notEmpty: true,
           isNumeric: true,
         },
       },
       bookImgUrl: {
         type: DataTypes.STRING,
         validate: {
-          allowNull:false,
-          notEmpty: true,
+          isUrl: true,
         },
       },
     },

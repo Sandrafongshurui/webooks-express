@@ -22,7 +22,7 @@ const getBooksMethods = {
       const newBookData = {
         title: title,
         author: authorName,
-        genreId: randomInteger(1, 12),
+        genreId: randomInteger(11, 22),
         sypnosis: sypnosisList[randomInteger(0, sypnosisList.length - 1)],
         copiesAvailable: randomInteger(2, 5),
         epubUrl: formats["application/epub+zip"],

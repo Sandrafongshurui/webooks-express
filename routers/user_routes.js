@@ -2,9 +2,11 @@ const express = require('express')
 const userController = require('../controllers/user_controller')
 const authMiddleware = require('../middlewares/auth_middleware')
 const imageMethods = require("../middlewares/image_methods")
+const awsMethods = require("../middlewares/aws_methods")
 const multer = require("multer")
 const upload = multer()
-
+// const storage = multer.memoryStorage()
+// const upload = multer({ dest: "public/epub" })
 const router = express.Router()
 
 //http://localhost:8000/api/v1/
@@ -15,7 +17,7 @@ router.get('/reserves', authMiddleware, userController.listReserves) //return []
 router.get('/favourites', authMiddleware, userController.listFavourites)//return []
 router.get('/notifications', authMiddleware, userController.listNotifications)//return []
 
-router.post('/book', authMiddleware, userController.createBook)//returns 201
+router.post('/book', authMiddleware, upload.any("files"), awsMethods.uploadFiles, userController.createBook)//returns 201
 router.post('/loan/book/:bookId', authMiddleware, userController.createLoan)//returns 201
 router.post('/reserve/book/:bookId', authMiddleware, userController.createReserve) //returns 201
 router.post('/favourite/book/:bookId', authMiddleware, userController.createFavourite)
@@ -23,7 +25,7 @@ router.post('/favourite/book/:bookId', authMiddleware, userController.createFavo
 router.patch('/loan/:id/renew', authMiddleware, userController.renewLoan)//returns 200
 router.patch('/loan/:loanId/book/:bookId/close', authMiddleware, userController.closeBook)//return 200
 router.patch('/book/:id', authMiddleware, userController.editBook) //return 200
-router.patch('/profile', authMiddleware, upload.single("file"), imageMethods.uploadImge, userController.editProfile) //return 200
+router.patch('/profile', authMiddleware, upload.single("file"), imageMethods.uploadSingle, userController.editProfile) //return 200
 router.patch('/notification/:id', authMiddleware, userController.readNotification) //return 200
 
 router.delete('/loan/:loanId/book/:bookId/return', authMiddleware, userController.returnLoan, userController.checkReserveForBook, userController.createLoan) //return 200
