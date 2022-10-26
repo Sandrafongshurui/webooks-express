@@ -7,7 +7,7 @@ const userController = {
   //profile
   showProfile: async (req, res) => {
     let user = null;
-    let userAuth = req.userId; //res.locals.userAuthId;
+    let userAuth = ; //res.locals.userAuthId;
     console.log("----->", userAuth);
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -28,7 +28,7 @@ const userController = {
     }
   },
   editProfile: async (req, res) => {
-    let userAuth = req.userId; //this is where the token is saved
+    let userAuth = ; //this is where the token is saved
     console.log(req.file);
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -76,7 +76,7 @@ const userController = {
     }
   },
   editBook: async (rew, res) => {
-    let userAuth = req.userId; //this is where the token is saved
+    let userAuth = ; //this is where the token is saved
     // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -101,7 +101,7 @@ const userController = {
   //loans
   listLoans: async (req, res) => {
     let loans = null;
-    let userAuth = req.userId; //this is where the token is saved
+    let userAuth = ; //this is where the token is saved
     // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -125,7 +125,7 @@ const userController = {
   createLoan: async (req, res) => {
     try {
       //check if its auto (from after cancel loan), or is user ownself create loan
-      const userId = req.NextUserIdFromReserve || req.userId;
+      const userId = req.NextUserIdFromReserve || ;
       const bookId = req.bookId || req.params.bookId;
       const [loan, created] = await db.loan.findOrCreate({
         where: {
@@ -163,7 +163,7 @@ const userController = {
     }
   },
   renewLoan: async (req, res) => {
-    let userAuth = req.userId; //this is where the token is saved
+    let userAuth = ; //this is where the token is saved
     // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -201,7 +201,7 @@ const userController = {
   },
   //use this for scheduled jobs
   returnLoan: async (req, res, next) => {
-    let userAuth = req.userId; //this is where the token is saved
+    let userAuth = ; //this is where the token is saved
     // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -247,7 +247,7 @@ const userController = {
     }
   },
   openBook: async (req, res) => {
-    let userAuth = req.userId; //res.locals.userAuthId;
+    let userAuth = ; //res.locals.userAuthId;
     console.log("----->", userAuth);
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -272,7 +272,7 @@ const userController = {
     }
   },
   closeBook: async (req, res) => {
-    let userAuth = req.userId; //res.locals.userAuthId;
+    let userAuth = ; //res.locals.userAuthId;
     console.log("----->", userAuth);
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -298,7 +298,7 @@ const userController = {
   //reserves
   listReserves: async (req, res) => {
     let reserves = null;
-    let userAuth = req.userId; //this is where the token is saved
+    let userAuth = ; //this is where the token is saved
     // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -322,9 +322,9 @@ const userController = {
   createReserve: async (req, res) => {
     try {
       const [reserve, created] = await db.reserve.findOrCreate({
-        where: { userId: req.userId, bookId: req.params.bookId },
+        where: { userId: , bookId: req.params.bookId },
         defaults: {
-          userId: req.userId,
+          userId: ,
           bookId: req.params.bookId,
         },
       });
@@ -340,7 +340,7 @@ const userController = {
     }
   },
   cancelReserve: async (req, res) => {
-    let userAuth = req.userId; //this is where the token is saved
+    let userAuth = ; //this is where the token is saved
     // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -360,7 +360,7 @@ const userController = {
   //favourites
   listFavourites: async (req, res) => {
     let favourites = null;
-    let userAuth = req.userId; //this is where the token is saved
+    let userAuth = ; //this is where the token is saved
     // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -384,9 +384,9 @@ const userController = {
   createFavourite: async (req, res) => {
     try {
       const [favourite, created] = await db.favourite.findOrCreate({
-        where: { userId: req.userId, bookId: req.params.bookId },
+        where: { userId: , bookId: req.params.bookId },
         defaults: {
-          userId: req.userId,
+          userId: ,
           bookId: req.params.bookId,
         },
       });
@@ -402,7 +402,7 @@ const userController = {
     }
   },
   deleteFavourite: async (req, res) => {
-    let userAuth = req.userId; //this is where the token is saved
+    let userAuth = ; //this is where the token is saved
     // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -422,7 +422,7 @@ const userController = {
   //notifications
   listNotifications: async (req, res) => {
     let notifications = null;
-    let userAuth = req.userId; //this is where the token is saved
+    let userAuth = ; //this is where the token is saved
     // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -446,7 +446,7 @@ const userController = {
   },
   readNotification: async (req, res) => {
     let notification = null;
-    let userAuth = req.userId; //this is where the token is saved
+    let userAuth = ; //this is where the token is saved
     // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -470,7 +470,7 @@ const userController = {
   },
   deleteNotification: async (req, res) => {
     let notification = null;
-    let userAuth = req.userId; //this is where the token is saved
+    let userAuth = ; //this is where the token is saved
     // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
