@@ -82,7 +82,7 @@ const authController = {
     return res
       .cookie("token", token, {
         httpOnly: true, //cookie can’t be read using JavaScript
-        secure: true
+        secure: false //looking for https
       })
       .status(200)
       .json({ message: "Logged in successfully" });
