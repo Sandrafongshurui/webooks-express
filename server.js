@@ -13,15 +13,16 @@ const port = process.env.PORT || 8000;
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(session({
-//   resave:false,
-//   saveUnintialized: false,
-//   secret: "session",
-//   cookie:{
-//     maxAge: 1000 * 60 * 60,
-//     secure:false,//true means https not http. requried cos same site is none, so you set up a proxy to act as middle man to set the cookie in FE
-//   }
-// }))
+app.use(session({
+  resave:false,
+  saveUnintialized: false,
+  secret: "session",
+  cookie:{
+    maxAge: 1000 * 60 * 60,
+    secure:true,//true means https not http. requried cos same site is none, so you set up a proxy to act as middle man to set the cookie in FE
+    sameSite: "none"
+  }
+}))
 
 //credentials true expects the cookies from FE
 app.set("trust proxy", 1)
