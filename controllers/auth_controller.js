@@ -82,7 +82,8 @@ const authController = {
     return res
       .cookie("token", token, {
         httpOnly: true, //cookie can’t be read using JavaScript
-        secure: false //looking for https
+        secure: false, //looking for https
+        sameSite: "None"
       })
       .status(200)
       .json({ message: "Logged in successfully" });
