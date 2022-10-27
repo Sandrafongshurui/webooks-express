@@ -1,7 +1,5 @@
 require("dotenv").config();
-const {Client} = require("pg");
-const { Sequelize } = require("sequelize");
-
+const session = require("express-session");
 const express = require("express");
 const cors = require("cors");
 const bookRouter = require("./routers/book_routes");
@@ -15,10 +13,21 @@ const port = process.env.PORT || 8000;
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// app.use(session({
+//   resave:false,
+//   saveUnintialized: false,
+//   secret: "session",
+//   cookie:{
+//     maxAge: 1000 * 60 * 60,
+//     secure:false,//true means https not http. requried cos same site is none, so you set up a proxy to act as middle man to set the cookie in FE
+//   }
+// }))
 
+//credentials true expects the cookies from FE
 app.use(
   cors({
     origin: "http://localhost:3000",
+    credentials: true
   })
 );
 
