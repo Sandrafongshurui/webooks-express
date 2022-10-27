@@ -5,8 +5,10 @@ const jwt = require("jsonwebtoken");
 const authController = {
   register: async (req, res, next) => {
     try {
-      if(req.body.password.length < 4){
-        return res.status(500).json({ error: "Password needs to be more than 4 characters" });
+      if (req.body.password.length < 4) {
+        return res
+          .status(500)
+          .json({ error: "Password needs to be more than 4 characters" });
       }
       const passHash = await bcrypt.hash(req.body.password, 10);
       const user = await db.user.create({
@@ -19,7 +21,7 @@ const authController = {
         userId: user.id,
         email: user.email,
       };
-  
+
       //gnerate the token
       const token = jwt.sign(
         {
@@ -72,8 +74,8 @@ const authController = {
     const options = {
       httpOnly: true, //cookie can’t be read using JavaScript
       secure: true, //looking for https
-      sameSite: "None"
-    }
+      sameSite: "None",
+    };
     //gnerate the token
     const token = jwt.sign(
       {
@@ -83,11 +85,11 @@ const authController = {
       process.env.JWT_SECRET
     );
     // store token cookie with the respond
-    // return res
-    //   .cookie("token", "my tokennnn")
-    //   .status(200)
-    //   .json({ message: "Logged in successfully" });
-    res.cookie("token", "asdfghjkl").status(200).json({ message: "user is authenciated" });
+    return res
+      .cookie("token", token, options)
+      .status(200)
+      .json({ message: "Logged in successfully" });
+    // res.cookie("token", "asdfghjkl").status(200).json({ message: "user is authenciated" });
   },
   logout: async (req, res) => {
     return res

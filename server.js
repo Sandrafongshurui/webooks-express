@@ -24,11 +24,10 @@ app.use(express.json());
 // }))
 
 //credentials true expects the cookies from FE
-// app.set("trust proxy", 1)
+app.set("trust proxy", 1)
 app.use(
   cors({
-    origin: process.env.FRONT_END_URL || "http://localhost:3000",
-    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
