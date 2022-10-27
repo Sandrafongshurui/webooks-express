@@ -73,8 +73,8 @@ const authController = {
     };
     const options = {
       httpOnly: true, //cookie can’t be read using JavaScript
-      // secure: true, //looking for https
-      // sameSite: "None",
+      secure: true, //looking for https
+      sameSite: "None",
     };
     //gnerate the token
     const token = jwt.sign(
