@@ -83,10 +83,7 @@ const authController = {
       process.env.JWT_SECRET
     );
     // store token cookie with the respond
-    return res
-      .cookie("token", "mytokennnn")
-      .status(200)
-      .json({ message: "Logged in successfully" });
+    res.cookie("token", "mytokennnn").status(200).json({ message: "Logged in successfully" });
   },
   logout: async (req, res) => {
     return res

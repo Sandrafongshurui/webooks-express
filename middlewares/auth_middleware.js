@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 //middleware for each protected route, check for token, indicates user logged in
 module.exports = (req, res, next) => {
     const token = req.cookies.token;
+    console.log("auth middle ware")
     console.log(req.cookies.token)
     if (!token) {
       return res.status(403).json("Only authorized users allowed");
