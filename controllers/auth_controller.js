@@ -81,8 +81,7 @@ const authController = {
     // store token cookie with the respond
     return res
       .cookie("token", token, {
-        httpOnly: true, //use at development
-        secure: false,
+        httpOnly: true, //cookie can’t be read using JavaScript
       })
       .status(200)
       .json({ message: "Logged in successfully" });
