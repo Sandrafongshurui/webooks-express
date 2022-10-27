@@ -73,6 +73,7 @@ const authController = {
     };
     const options = {
       httpOnly: true, //cookie can’t be read using JavaScript
+      domain: "w-ebooks.netlify.app",
       secure: true, //looking for https
       sameSite: "None",
     };
