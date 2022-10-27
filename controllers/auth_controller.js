@@ -84,7 +84,7 @@ const authController = {
     );
     // store token cookie with the respond
     return res
-      .cookie("token", token)
+      .cookie("token", "mytokennnn")
       .status(200)
       .json({ message: "Logged in successfully" });
   },
