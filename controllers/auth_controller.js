@@ -69,7 +69,11 @@ const authController = {
       userId: user.id,
       email: user.email,
     };
-
+    const options = {
+      httpOnly: true, //cookie can’t be read using JavaScript
+      secure: true, //looking for https
+      sameSite: "None"
+    }
     //gnerate the token
     const token = jwt.sign(
       {
@@ -80,11 +84,7 @@ const authController = {
     );
     // store token cookie with the respond
     return res
-      .cookie("token", token, {
-        httpOnly: true, //cookie can’t be read using JavaScript
-        secure: true, //looking for https
-        sameSite: "None"
-      })
+      .cookie("token", token)
       .status(200)
       .json({ message: "Logged in successfully" });
   },
