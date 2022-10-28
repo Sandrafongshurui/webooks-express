@@ -28,7 +28,7 @@ app.use(express.json());
 app.set("trust proxy", 1)
 app.use(
   cors({
-    origin: "https://w-ebooks.netlify.app",
+    origin: true,
     credentials: true,
   })
 );
