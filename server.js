@@ -28,7 +28,7 @@ app.use(express.json());
 app.set("trust proxy", 1)
 app.use(
   cors({
-    origin: true,
+    origin: process.env.NODE_ENV === "production" ? "w-ebooks.herokuapp.com/" : "localhost:3000",
     credentials: true,
   })
 );
