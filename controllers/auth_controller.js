@@ -73,8 +73,10 @@ const authController = {
     };
     const options = {
       httpOnly: true, //cookie can’t be read using JavaScript
-      secure: true, //looking for https
-      sameSite: "None",
+      // secure: true, //looking for https
+      // sameSite: "None",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // must be 'none' to enable cross-site delivery
+      secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
     };
     //gnerate the token
     const token = jwt.sign(
