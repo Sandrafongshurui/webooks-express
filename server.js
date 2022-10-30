@@ -41,4 +41,4 @@ app.use("/api/v1/auth", authRouter);
 //connecting to that database
 app.listen(port, async () => {
   console.log(`Express server listening on port ${port}`);
-});
+})

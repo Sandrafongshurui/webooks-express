@@ -14,7 +14,9 @@ const s3 = new AWS.S3({
 });
 const awsMethods = {
   uploadFiles: async (req, res, next) => {
+    console.log(req.body)
     if (req.files) {
+      console.log(req.files)
       let params = null;
       const promises = req.files.map(async (file) => {
         return await new Promise((resolve, reject) => {
