@@ -60,21 +60,19 @@ const userController = {
     }
 
     try {
-      let epubUrl = null
-      let bookImgUrl = null 
-      req.uploadedData.forEach(element => {
-        if(element.Bucket === "webooks-epub-files")
-        {
-          epubUrl= element.Location
-        }else{
-          bookImgUrl= element.Location
+      let epubUrl = null;
+      let bookImgUrl = null;
+      req.uploadedData.forEach((element) => {
+        if (element.Bucket === "webooks-epub-files") {
+          epubUrl = element.Location;
+        } else {
+          bookImgUrl = element.Location;
         }
-        
       });
       const book = await db.book.create({
         ...req.body,
         epubUrl,
-        bookImgUrl
+        bookImgUrl,
       });
       console.log("New book Created:", book);
       return res.status(201).json("New book Created");
@@ -122,8 +120,6 @@ const userController = {
         include: { model: db.book },
         where: { userId: userAuth },
       });
-
-      console.log(loans);
       return res.json(loans);
     } catch (err) {
       console.log(err);
@@ -272,7 +268,7 @@ const userController = {
 
     try {
       const loan = await db.loan.findOne({
-        include: { model: db.book },
+        include: [{ model: db.book }],
         where: { id: req.params.loanId },
       });
 
@@ -288,21 +284,23 @@ const userController = {
   },
   closeBook: async (req, res) => {
     let userAuth = req.userId; //this is where the token is saved
-    // console.log(req.file)
+    console.log(req.body.annotationArry);
     //this is redundant, security, defence indepth
     if (!userAuth) {
       console.log(userAuth);
       return res.status(401).json();
     }
     try {
-      const loan = await db.loan.findByPk(req.params.loanId);
+      // const loan = await db.loan.findByPk(req.params.loanId);
+      console.log(req.body);
       await db.loan.update(
-        { bookProgress: req.query.pageNum },
+        { bookProgress: req.body.bookProgress },
         {
           where: { id: req.params.loanId },
         }
       );
-      console.log(loan);
+      // await db.annotation.bulkCreate("annotations", req.body.annotationArry);
+
       return res.status(200).json("Loan page progress updated");
     } catch (err) {
       console.log(err);
