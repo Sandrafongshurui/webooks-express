@@ -29,7 +29,7 @@ const awsMethods = {
             };
           } else {
             params = {
-              Bucket: "webooks-images-files",
+              Bucket: "w-ebooks-bookcovers",
               Key: file.originalname, // File name you want to save as in S3
               Body: file.buffer,
             };
