@@ -4,8 +4,13 @@ const bookController = {
   listBooks: async (req, res) => {
     try {
       console.log("List all books");
-      const books = await db.book.findAll();
-      return res.json(books);
+      const latestBooks = await db.book.findAll({
+        order: [["createdAt", "DESC"]],
+      });
+      const popularBooks = await db.book.findAll({
+        order: [["totalLoans", "DESC"]],
+      });
+      return res.status(200).json({latestBooks, popularBooks})
     } catch (error) {
       console.log(error);
       return res.json({ error: error });
@@ -28,11 +33,7 @@ const bookController = {
   },
   search: async (req, res) => {
     try {
-        
-      }
-     catch (error) {
-      
-    }
+    } catch (error) {}
   },
 };
 
