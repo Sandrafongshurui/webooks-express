@@ -62,11 +62,12 @@ const userController = {
     try {
       let epubUrl = null;
       let bookImgUrl = null;
-      req.uploadedData.forEach((element) => {
-        if (element.Bucket === "webooks-epub-files") {
-          epubUrl = element.Location;
+      req.uploadedUrls.forEach((element) => {
+        console.log(element)
+        if (element.type === "application/epub+zip") {
+          epubUrl = element.url;
         } else {
-          bookImgUrl = element.Location;
+          bookImgUrl = element.url;
         }
       });
       const book = await db.book.create({

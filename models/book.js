@@ -57,7 +57,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull:false,
         validate: {
-          isUrl: true,
           notEmpty: true,
         },
       },
@@ -69,10 +68,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       bookImgUrl: {
-        type: DataTypes.STRING,
-        validate: {
-          isUrl: true,
-        },
+        type: DataTypes.STRING,        
       },
     },
     {

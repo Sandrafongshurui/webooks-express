@@ -3,6 +3,7 @@ const userController = require('../controllers/user_controller')
 const authMiddleware = require('../middlewares/auth_middleware')
 const imageMethods = require("../middlewares/image_methods")
 const awsMethods = require("../middlewares/aws_methods")
+const googleCloudMethods = require("../middlewares/googlecloud_methods")
 const multer = require("multer")
 const upload = multer()
 // const storage = multer.memoryStorage()
@@ -17,7 +18,7 @@ router.get('/reserves', authMiddleware, userController.listReserves) //return []
 router.get('/favourites', authMiddleware, userController.listFavourites)//return []
 router.get('/notifications', authMiddleware, userController.listNotifications)//return []
 
-router.post('/book', authMiddleware, upload.any("files"), awsMethods.uploadFiles, userController.createBook)//returns 201
+router.post('/book', authMiddleware, upload.any("files"), googleCloudMethods.uploadFiles, userController.createBook)//returns 201
 router.post('/loan/book/:bookId', authMiddleware, userController.createLoan)//returns 201
 router.post('/reserve/book/:bookId', authMiddleware, userController.createReserve) //returns 201
 router.post('/favourite/book/:bookId', authMiddleware, userController.createFavourite)
