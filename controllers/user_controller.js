@@ -300,7 +300,7 @@ const userController = {
           where: { id: req.params.loanId },
         }
       );
-      // await db.annotation.bulkCreate("annotations", req.body.annotationArry);
+      await db.annotation.bulkCreate("annotations", req.body.annotationArry);
 
       return res.status(200).json("Loan page progress updated");
     } catch (err) {

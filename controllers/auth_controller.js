@@ -77,6 +77,7 @@ const authController = {
       // sameSite: "None",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // must be 'none' to enable cross-site delivery
       secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
+      domain: "w-ebooks.netlify.app/"
     };
     //gnerate the token
     const token = jwt.sign(
