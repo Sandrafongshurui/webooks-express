@@ -15,7 +15,7 @@ const authController = {
         ...req.body,
         password: passHash,
       });
-      console.log("New User Created:", user);
+      console.log("New User Created, logging in", user);
 
       const userData = {
         userId: user.id,
@@ -30,17 +30,22 @@ const authController = {
         },
         process.env.JWT_SECRET
       );
+      const options = {
+        httpOnly: true, //cookie can’t be read using JavaScript
+        // secure: true, //looking for https
+        // sameSite: "None",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // must be 'none' to enable cross-site delivery
+        secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
+        // domain: "w-ebooks.netlify.app/"
+      };
       // store token cookie with the respond
       return res
-        .cookie("token", token, {
-          httpOnly: true, //use at development
-          secure: process.env.NODE_ENV === "production",
-        })
+        .cookie("token", token, options)
         .status(200)
-        .json({ message: "New User Created and Logged in successfully" });
+        .json({ message: "Registered successfully", token });
     } catch (err) {
-      console.log(err);
-      return res.status(500).json({ error: "Failed to register new user" });
+      console.log("--->", err);
+      return res.status(500).json({error: err.errors[0].message });
     }
   },
   login: async (req, res) => {
@@ -77,7 +82,7 @@ const authController = {
       // sameSite: "None",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // must be 'none' to enable cross-site delivery
       secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
-      domain: "w-ebooks.netlify.app/"
+      // domain: "w-ebooks.netlify.app/"
     };
     //gnerate the token
     const token = jwt.sign(
@@ -91,7 +96,7 @@ const authController = {
     return res
       .cookie("token", token, options)
       .status(200)
-      .json({ message: "Logged in successfully" });
+      .json({ token });
     // res.cookie("token", "asdfghjkl").status(200).json({ message: "user is authenciated" });
   },
   logout: async (req, res) => {

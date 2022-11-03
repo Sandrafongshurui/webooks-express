@@ -63,7 +63,7 @@ const userController = {
       let epubUrl = null;
       let bookImgUrl = null;
       req.uploadedUrls.forEach((element) => {
-        console.log(element)
+        console.log(element);
         if (element.type === "application/epub+zip") {
           epubUrl = element.url;
         } else {
@@ -183,29 +183,13 @@ const userController = {
       return res.status(401).json();
     }
     try {
-      const loan = await db.loan.findByPk(req.params.id);
-      //check the days b
-      const arrayOfDates = dateMethods.getDatesInRange(
-        new Date(),
-        loan.dueDate
+      await db.loan.update(
+        { dueDate: dateMethods.addDays(loan.dueDate, 21) },
+        {
+          where: { id: req.params.id },
+        }
       );
-      //only less than 3 days then can renew
-      if (arrayOfDates.length < 4) {
-        await db.loan.update(
-          { dueDate: dateMethods.addDays(loan.dueDate, 21) },
-          {
-            where: { id: req.params.id },
-          }
-        );
-        return res.status(200).json("Loan renewed");
-      } else {
-        const daysToRenewal = arrayOfDates.length - 4;
-        return res
-          .status(200)
-          .json(
-            `It's too early for renewal! You will be able to renew it in ${daysToRenewal} days`
-          );
-      }
+      return res.status(200).json("Loan renewed");
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: "failed to renew book" });
@@ -272,12 +256,15 @@ const userController = {
         include: [{ model: db.book }],
         where: { id: req.params.loanId },
       });
+      const annotations = await db.annotation.findAll({
+        where: { loanId: req.params.loanId },
+      });
 
       if (!loan) {
         return res.status(404).json({ error: "loan does not exsits" });
       }
-      console.log(loan);
-      return res.json(loan);
+      console.log(loan, annotations);
+      return res.status(200).json({ annotations, loan });
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: "failed to get loan" });
@@ -300,7 +287,8 @@ const userController = {
           where: { id: req.params.loanId },
         }
       );
-      await db.annotation.bulkCreate("annotations", req.body.annotationArry);
+      await db.annotation.destroy({ where: { loanId: req.params.loanId } });
+      await db.annotation.bulkCreate(req.body.annotationArry);
 
       return res.status(200).json("Loan page progress updated");
     } catch (err) {
