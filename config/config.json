@@ -12,12 +12,9 @@
     "port" : "5432"
   },
   "production": {
-    "database": "anehqnsz",
-    "host": "tiny.db.elephantsql.com",
-    "username":"anehqnsz",
-    "password": "KW9hwU3wG_267ox6haOn-HNgqbxQKeN6",
+    "database": "webooks_production",
+    "host": "127.0.0.1",
     "dialect": "postgres",
     "port" : "5432"
-
   }
 }
