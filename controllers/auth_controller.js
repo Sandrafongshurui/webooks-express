@@ -74,7 +74,11 @@ const authController = {
     //change the schema obj to plain js object
     const userData = {
       userId: user.id,
-      email: user.email,
+      // email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      profileImgUrl: user.profileImgUrl,
+      isLibrarian: user.isLibrarian
     };
     const options = {
       httpOnly: true, //cookie can’t be read using JavaScript

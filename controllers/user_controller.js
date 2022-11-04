@@ -16,7 +16,10 @@ const userController = {
     }
 
     try {
-      user = await db.user.findByPk(userAuth);
+      user = await db.user.findOne({
+        include: [{ model: db.loan }],
+        where: { id: req.userId},
+      });
       if (!user) {
         return res.status(404).json({ error: "user does not exsits" });
       }
@@ -43,7 +46,7 @@ const userController = {
           where: { id: userAuth },
         }
       );
-      return res.status(200).json("Profile edited");
+      return res.status(200).json({profileImgUrl: req.file});
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: "failed to get user" });
@@ -161,6 +164,8 @@ const userController = {
           by: 1,
           where: { id: req.params.bookId },
         });
+        //delete loan form previous user
+   
         return res
           .status(201)
           .json(
@@ -237,6 +242,7 @@ const userController = {
     if (reserves.length > 0) {
       //create a loan for this user
       req.NextUserIdFromReserve = reserves[0].userId;
+      req.NextUserReserveId = reserves[0].id
       next();
     } else {
       return res.status(200).json("Loan returned, no other user reserve it");
@@ -349,6 +355,8 @@ const userController = {
   },
   cancelReserve: async (req, res) => {
     let userAuth = req.userId; //this is where the token is saved
+    //if theres no params means its the auto cancel
+    const reserveId = req.params.id  || req.NextUserReserveId
     // console.log(req.file)
     //this is redundant, security, defence indepth
     if (!userAuth) {
@@ -357,7 +365,7 @@ const userController = {
     }
     try {
       const reserve = await db.reserve.destroy({
-        where: { id: req.params.id },
+        where: { id: reserveId },
       });
       return res.status(200).json("Reserve cancelled");
     } catch (err) {

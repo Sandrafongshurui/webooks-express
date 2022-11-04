@@ -30,6 +30,7 @@ const imageMethods = {
       );
     } else {
       console.log("no req.file, use no preview image");
+      req.file = " ";
       next();
       // return res.status(500).json({
       //   status: "failed",

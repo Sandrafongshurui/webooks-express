@@ -29,7 +29,7 @@ router.patch('/book/:id', authMiddleware, userController.editBook) //return 200
 router.patch('/profile', authMiddleware, upload.single("file"), imageMethods.uploadSingle, userController.editProfile) //return 200
 router.patch('/notification/:id', authMiddleware, userController.readNotification) //return 200
 
-router.delete('/loan/:loanId/book/:bookId/return', authMiddleware, userController.returnLoan, userController.checkReserveForBook, userController.createLoan) //return 200
+router.delete('/loan/:loanId/book/:bookId/return', authMiddleware, userController.returnLoan, userController.checkReserveForBook, userController.createLoan, userController.cancelReserve) //return 200
 router.delete('/profile', authMiddleware, userController.editProfile) //return 200
 router.delete('/favourite/:id', authMiddleware, userController.deleteFavourite) //return 200
 router.delete('/notification/:id', authMiddleware, userController.deleteNotification) //return 200
