@@ -10,7 +10,7 @@ const bookController = {
       const popularBooks = await db.book.findAll({
         order: [["totalLoans", "DESC"]],
       });
-      return res.status(200).json({latestBooks, popularBooks})
+      return res.status(200).json({ latestBooks, popularBooks });
     } catch (error) {
       console.log(error);
       return res.json({ error: error });
@@ -18,7 +18,10 @@ const bookController = {
   },
   showBook: async (req, res) => {
     try {
-      const book = await db.book.findByPk(req.params.id);
+      const book = await db.book.findOne({
+        include: [{ model: db.genre, attributes: ["genreName"] }],
+        where: { id: req.params.id },
+      });
       if (book) {
         return res.json(book);
       } else {
